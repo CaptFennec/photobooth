@@ -39,7 +39,7 @@ high_res_h = 1944 # height of high res image, if taken
 ### Variables that Change ###
 #############################
 # Do not change these variables, as the code will change it anyway
-total_pics = 0 # number of pics to be taken
+total_pics = 1 # number of pics to be taken
 transform_x = config.monitor_w # how wide to scale the image when replaying
 transfrom_y = config.monitor_h # how high to scale the image when replaying
 offset_x = 0 # how far off to left corner to display photos
@@ -68,7 +68,7 @@ pygame.display.toggle_fullscreen()
 
 # clean up running programs as needed when main program exits
 def cleanup():
-  print "Ended abruptly" 
+  print('Ended abruptly') 
   pygame.quit()
 #  GPIO.cleanup() # was used by RPi.GPIO. Needed for gpiozero?
 atexit.register(cleanup) # ça fait quoi?
@@ -86,7 +86,7 @@ def clear_pics(channel):
 	for f in files:
 		os.remove(f) 
 	#light the lights in series to show completed
-	print "Deleted previous pics" 
+	print('Deleted previous pics') 
 	
 	yled.blink(on_time=1, off_time=1, n=3, background=True)
 	rled.blink(on_time=1, off_time=1, n=3, background=False) # simultaneous blinking of both button LEDs, with the yellow on running on background
@@ -169,7 +169,7 @@ def clear_screen():
 
 # display a group of images
 def display_pics(png_group):
-    for i in range(0, config.replay_cycles): # show pics a few times
+	for i in range(0, config.replay_cycles): # show pics a few times
 		for i in range(1, total_pics+1): # show each pic
 			show_image(config.file_path + png_group + "-0" + str(i) + ".png")
 			time.sleep(config.replay_delay) # pause 
@@ -181,9 +181,7 @@ def gifmode():
 	make_gifs = True
 	total_pics = config.gif_total_pics
 	hi_res_pics = True
-	print "Starting photobooth in gif mode"
-	
-	start_photobooth()
+	print('Starting photobooth in gif mode')
 	
 #Start the photobooth in high defintion DSLR mode
 def picmode():
@@ -192,9 +190,7 @@ def picmode():
 	make_gifs = False
 	total_pics = 1
 	hi_res_pics = True
-	print "Starting photobooth in DSLR mode"
-	
-	start_photobooth()
+	print('Starting photobooth in DSLR mode')
 
 # define the photo taking function for when a button is held long enough 
 def start_photobooth(): 
@@ -203,7 +199,7 @@ def start_photobooth():
 
 	################################# Begin Step 1 #################################
 	
-	print "Get Ready" 
+	print('Get Ready') 
 	yled.off() # shut down the yellow LED
 	rled.off() # shut down the red LED
 	show_image(real_path + "/instructions.png")
@@ -230,50 +226,10 @@ def start_photobooth():
 		
 	################################# Begin Step 2 #################################
 	
-	print "Taking pics"
+	print ('Taking pics')
 	
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
-"""	
-	if config.capture_count_pics: # Is that part worth it?
-		try: # take the photos
-			for i in range(1,total_pics+1):
-				camera.hflip = True # preview a mirror image
-				camera.start_preview(resolution=(config.monitor_w, config.monitor_h)) # start preview at low res but the right ratio
-				time.sleep(2) #warm up camera
-				yled.on() #turn on the LED
-				rled.on()
-				filename = config.file_path + now + '-0' + str(i) + '.png'
-				camera.hflip = False # flip back when taking photo
-				camera.capture(filename,format='png',splitter_port=1)
-				print(filename)
-				time.sleep(config.capture_delay) # pause in-between shots
-				yled.off()#turn off the LED
-				camera.stop_preview()
-				show_image(real_path + "/pose" + str(i) + ".png")
-				time.sleep(config.capture_delay) # pause in-between shots
-				clear_screen()
-				if i == total_pics+1:
-					break
-		finally:
-			camera.close()
-	else:
-		camera.start_preview(resolution=(config.monitor_w, config.monitor_h)) # start preview at low res but the right ratio
-		time.sleep(2) #warm up camera
-		
-		try: #take the photos
-			for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.png'),format='png'):
-				yled.on() #turn on the LED
-				rled.on()
-				print(filename)
-				time.sleep(config.capture_delay) # pause in-between shots
-				yled.off()#turn off the LED
-				rled.off()
-				if i == total_pics-1:
-					break
-		finally:
-			camera.stop_preview()
-			camera.close()
-"""
+
 	if make_gifs:
 		try: # take the photos
 			for i in range(1,total_pics+1):
@@ -306,19 +262,20 @@ def start_photobooth():
 			rled.on()
 			time.sleep(2) # to keep LEDs still before the shot
 			filename = config.file_path + now + '.png'
+			#picamera capture
+			camera.hflip = False # flip back when taking photo
+			camera.capture(filename,format='png',splitter_port=1)
 			#DSLR capture
-			gpout = subprocess.check_output("gphoto2 --capture-image-and-download --filename filename", stderr=subprocess.STDOUT, shell=True) # https://github.com/safay/RPi_photobooth/blob/master/photo_booth.py
-			print(gpout)
-			if "ERROR" not in gpout: 
-				snap += 1
+			#gpout = subprocess.check_output("gphoto2 --capture-image-and-download --filename filename", stderr=subprocess.STDOUT, shell=True) # https://github.com/safay/RPi_photobooth/blob/master/photo_booth.py
+			#print(gpout)
+			#if "ERROR" not in gpout: 
+			#	snap += 1
 			# Methode de binding à tester: https://github.com/jim-easterbrook/python-gphoto2#using-python-gphoto2
 			# pour l'affichage avec prise en compte de l'alpha http://eoghan.me.uk/notes/2016/03/28/photo-booth/
 			# ou ça http://picamera.readthedocs.io/en/release-1.10/recipes1.html#overlaying-images-on-the-preview
 			print(filename)
 			yled.off()#turn off the LED
 			rled.off()
-			if i == total_pics-1:
-				break
 		finally:
 			camera.stop_preview()
 			camera.close()
@@ -327,7 +284,7 @@ def start_photobooth():
 	
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 	
-	print "Creating an animated gif" 
+	print('Creating an animated gif')
 	
 	if config.post_online:
 		show_image(real_path + "/uploading.png")
@@ -347,56 +304,19 @@ def start_photobooth():
 			# make an animated gif with the low resolution images
 			graphicsmagick = "gm convert -delay " + str(config.gif_delay) + " " + config.file_path + now + "*.png " + config.file_path + now + ".gif" 
 			os.system(graphicsmagick) #make the .gif
-"""
-	if config.post_online: # turn off posting pics online in config.py
-		connected = is_connected() #check to see if you have an internet connection
 
-		if (connected==False):
-			print "bad internet connection"
-                    
-		while connected:
-			if make_gifs: 
-				try:
-					file_to_upload = config.file_path + now + ".gif"
-					client.create_photo(config.tumblr_blog, state="published", tags=[config.tagsForTumblr], data=file_to_upload)
-					break
-				except ValueError:
-					print "Oops. No internect connection. Upload later."
-					try: #make a text file as a note to upload the .gif later
-						file = open(config.file_path + now + "-FILENOTUPLOADED.txt",'w')   # Trying to create a new file or open one
-						file.close()
-					except:
-						print('Something went wrong. Could not write file.')
-						sys.exit(0) # quit Python
-			else: # upload pngs instead
-				try:
-					# create an array and populate with file paths to our pngs
-					myPngs=[0 for i in range(4)]
-					for i in range(4):
-						myPngs[i]=config.file_path + now + "-0" + str(i+1) + ".png"
-					client.create_photo(config.tumblr_blog, state="published", tags=[config.tagsForTumblr], format="markdown", data=myPngs)
-					break
-				except ValueError:
-					print "Oops. No internect connection. Upload later."
-					try: #make a text file as a note to upload the .gif later
-						file = open(config.file_path + now + "-FILENOTUPLOADED.txt",'w')   # Trying to create a new file or open one
-						file.close()
-					except:
-						print('Something went wrong. Could not write file.')
-						sys.exit(0) # quit Python				
-"""
 	########################### Begin Step 4 #################################
 	
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 	
 	try:
 		display_pics(now)
-	except Exception, e:
+	except Exception as e:
 		tb = sys.exc_info()[2]
 		traceback.print_exception(e.__class__, e, tb)
 		pygame.quit()
 		
-	print "Done"
+	print('Done')
 	
 	if config.post_online:
 		show_image(real_path + "/finished.png")
@@ -417,18 +337,25 @@ def start_photobooth():
 if config.clear_on_startup:
 	clear_pics(1)
 
-print "Photo booth app running..."
+print('Photo booth app running...')
 
 yled.blink(on_time=0.5, off_time=0.5, n=5, background=True) # blink light to show the app is running
 rled.blink(on_time=0.5, off_time=0.5, n=5, background=False) # simultaneous blinking of both button LEDs, with the yellow on running on background
 	
 show_image(real_path + "/intro.png")#;
 
+make_gifs = False
+total_pics = 1
+hi_res_pics = True
+
 while True:
 	yled.blink(on_time=1, off_time=1, n=None, background=True) # blink light to show users they can push the button
 	rled.blink(on_time=1, off_time=1, n=None, background=True) # simultaneous blinking of both button LEDs
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 	
-	ybutton.when_held = gifmode
-	rbutton.when_held = picmode
+	#ybutton.when_held = gifmode
+	#rbutton.when_held = picmode
 
+	rbutton.wait_for_press()
+	
+	start_photobooth()
