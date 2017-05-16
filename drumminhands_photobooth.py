@@ -23,17 +23,17 @@ from signal import alarm, signal, SIGALRM, SIGKILL
 ### Variables Config ###
 ########################
 
-yled = LED(7, active_high=True, initial_value=False) # pin definition for yellow button LED, active high (GPIO-resistor-long_LED_short-GND), off by default
-rled = LED(8, active_high=True, initial_value=False) # pin definition for red button LED, active high (GPIO-resistor-long_LED_short-GND), off by default
+yled = LED(27, active_high=True, initial_value=False) # pin definition for yellow button LED, active high (GPIO-resistor-long_LED_short-GND), off by default
+rled = LED(23, active_high=True, initial_value=False) # pin definition for red button LED, active high (GPIO-resistor-long_LED_short-GND), off by default
 
-ybutton = Button(18, pull_up=True, bounce_time=0.3, hold_time=3, hold_repeat=False) # pin definition for yellow button
-rbutton = Button(15, pull_up=True, bounce_time=0.3, hold_time=3, hold_repeat=False) # pin definition for red button
+ybutton = Button(22, pull_up=True, bounce_time=0.3, hold_time=3, hold_repeat=False) # pin definition for yellow button
+rbutton = Button(24, pull_up=True, bounce_time=0.3, hold_time=3, hold_repeat=False) # pin definition for red button
 
 # full frame of v1 camera is 2592x1944. Wide screen max is 2592,1555
 # if you run into resource issues, try smaller, like 1920x1152. 
 # or increase memory http://picamera.readthedocs.io/en/release-1.12/fov.html#hardware-limits
-high_res_w = 1296 # width of high res image, if taken
-high_res_h = 972 # height of high res image, if taken
+high_res_w = 2592 # width of high res image, if taken
+high_res_h = 1944 # height of high res image, if taken
 
 #############################
 ### Variables that Change ###
