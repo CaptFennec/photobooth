@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #http://picamera.readthedocs.io/en/release-1.10/recipes1.html#overlaying-images-on-the-preview
 #http://stackoverflow.com/questions/2659312/how-do-i-convert-a-numpy-array-to-and-display-an-image
+#https://www.raspberrypi.org/learning/the-all-seeing-pi/worksheet2/ ==> exactement ce que je veux faire!
 
 import picamera
 from PIL import Image
