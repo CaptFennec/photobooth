@@ -24,7 +24,7 @@ with picamera.PiCamera() as camera:
     pad.paste(img, (0, 0))
 	
 	#test pour sauvegarder l'image pour ne pas repasser par le padding à chaque execution
-	pad.save(
+	#pad.save(
     
 	# Add the overlay with the padded image as the source,
     # but the original image's dimensions

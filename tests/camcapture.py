@@ -3,7 +3,7 @@
 
 from gpiozero import Button
 from picamera import PiCamera
-from datetime import datetime
+import time
 from signal import pause
 
 white_button = Button(22)
@@ -11,7 +11,7 @@ red_button = Button(24)
 camera = PiCamera()
 
 def capture():
-    datetime = datetime.now().isoformat()
+    datetime = time.strftime("%Y-%m-%d-%H-%M-%S")
     camera.capture('/home/pi/%s.jpg' % datetime)
 
 white_button.when_pressed = camera.start_preview
