@@ -8,6 +8,13 @@ def next_overlay():
     global overlay
     overlay = next(all_overlays)
     preview_overlay(camera, overlay)
+    
+    #if 'overlay' in globals():
+    #    overlay = next(all_overlays)
+    #else:
+    #    global overlay # http://stackoverflow.com/questions/843277/how-do-i-check-if-a-variable-exists
+    #    overlay = next(all_overlays)# http://stackoverflow.com/questions/26545051/is-there-a-way-to-delete-created-variables-functions-etc-from-the-memory-of-th
+    #preview_overlay(camera, overlay)
 
 # Tell the take picture button what to do
 def take_picture():
