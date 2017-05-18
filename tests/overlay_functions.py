@@ -6,7 +6,7 @@ from itertools import chain #cycle
 
 # EDIT THESE VALUES ------------------------
 overlays_dir = "/home/pi/photobooth/tests/count_overlays"
-overlays = ['1', '2', '3', 'pink']
+overlays = ['1', '2', '3']
 # ------------------------------------------
 
 
