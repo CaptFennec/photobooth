@@ -1,12 +1,12 @@
-# Adapted by raspberrypilearning from some original code by bennuttall and waveform80
+# Adapted by raspberrypilearning/the-all-seeing-pi from some original code by bennuttall and waveform80
 # -------------------------------------------------------------
  
 from PIL import Image
-from itertools import cycle
+from itertools import chain #cycle
 
 # EDIT THESE VALUES ------------------------
-overlays_dir = "/home/pi/allseeingpi/overlays"
-overlays = ['girl', 'cowboy', 'top', 'pink', 'glassesnose', 'moustache', 'sunglasses', 'elvis', 'emo', 'blackhat', 'emo2', 'baseball', 'flowers', 'santa', 'alps', 'mop', 'glasses']
+overlays_dir = "/home/pi/photobooth/tests/count_overlays"
+overlays = ['1', '2', '3', 'pink']
 # ------------------------------------------
 
 
@@ -61,4 +61,4 @@ def output_overlay(output=None, overlay=None):
     new_output = Image.alpha_composite(output_img, overlay_img)
     new_output.save(output)
 
-all_overlays = cycle(overlays)
+all_overlays = chain(overlays)
